@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pembayaran - Sisambera</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header>
+        <a href="../index.html" class="logo">SISAMBERA</a>
+        <nav>
+            <a href="../index.html">Menu</a>
+            <a href="https://share.google/Z9udVdDifWWRAh0lY">Lokasi</a>
+            <a href="">Tentang Kami</a>
+        </nav>
+        <button class="order-btn">Pesan Online</button>
+    </header>
+
+    <div class="breadcrumb">
+        <a href="pilih-layanan.html" style="color: #999;">1. Pilih Layanan</a> > 
+        <a href="isi-data-diri.html" style="color: #999;">2. Isi Data Diri</a> > 
+        <a href="pilih-menu.html" style="color: #999;">3. Pilih Menu</a> > 
+        <span style="color: #c1395d; font-weight: 500;">4. Pembayaran</span>
+    </div>
+
+    <div class="container">
+        <div class="content-wrapper">
+            <div class="payment-content">
+                <h2>Pilih Metode Pembayaran</h2>
+                
+                <div class="payment-methods">
+                    <div class="payment-option" onclick="selectPayment(this, 'tunai')">
+                        <div class="payment-icon">💰</div>
+                        <div class="payment-info">
+                            <h3>Tunai</h3>
+                            <p>Bayar langsung di tempat</p>
+                        </div>
+                    </div>
+
+                    <div class="payment-option" onclick="selectPayment(this, 'qris')">
+                        <div class="payment-icon">📱</div>
+                        <div class="payment-info">
+                            <h3>QRIS</h3>
+                            <p>Scan kode QR dengan ponsel anda</p>
+                        </div>
+                    </div>
+
+                    <div class="payment-option" onclick="window.location.href='metode-pembayaran.html'">
+                        <div class="payment-icon">🏦</div>
+                        <div class="payment-info">
+                            <h3>Transfer Bank</h3>
+                            <p>Transfer melalui berbagai bank atau Alfamart</p>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="confirmPayment()">Lanjutkan</button>
+            </div>
+
+            <div class="order-summary-side">
+                <div class="summary-card">
+                    <h3>Ringkasan Pesanan</h3>
+                    <div id="cartSummary">
+                        <p style="text-align: center; color: #999; font-size: 13px;">Loading...</p>
+                    </div>
+                    <hr style="margin: 15px 0; border: none; border-top: 1px solid #e8e8e8;">
+                    <div class="summary-subtotal">
+                        <span>Subtotal</span>
+                        <span id="subtotal">Rp 0</span>
+                    </div>
+                    <div class="summary-fee">
+                        <span>Pajak 10%</span>
+                        <span id="tax">Rp 0</span>
+                    </div>
+                    <div class="summary-total">
+                        <strong>Total</strong>
+                        <strong id="total">Rp 0</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Rumah Makan Tradisional</h4>
+                <p>Hmmm rasakan Uisa rumahan dengan cita rasa tak terlupakan</p>
+            </div>
+            <div class="footer-section">
+                <h4>CONTACT ME</h4>
+                <p>+62 895 002 84858</p>
+                <p>Jl. Pradah Indah No.121</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <p><a href="../index.html">Menu</a></p>
+                <p><a href="pilih-layanan.html">Order</a></p>
+                <p><a href="#">Contact Us</a></p>
+            </div>
+            <div class="footer-section">
+                <h4>Our Social Media</h4>
+                <div class="social-links">
+                    <a href="#">f</a>
+                    <a href="#">📷</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let selectedPayment = null;
+
+        function selectPayment(element, method) {
+            document.querySelectorAll('.payment-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            selectedPayment = method;
+        }
+
+        function confirmPayment() {
+            if (!selectedPayment) {
+                alert('Pilih metode pembayaran terlebih dahulu!');
+                return;
+            }
+            sessionStorage.setItem('paymentMethod', selectedPayment);
+            window.location.href = 'konfirmasi.html';
+        }
+
+        function updateCartSummary() {
+            let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+            const cartSummary = document.getElementById('cartSummary');
+
+            if (cart.length === 0) {
+                window.location.href = 'pilih-menu.html';
+                return;
+            }
+
+            let html = '';
+            let subtotal = 0;
+            const grouped = {};
+
+            cart.forEach(item => {
+                if (!grouped[item.name]) {
+                    grouped[item.name] = { price: item.price, qty: 0 };
+                }
+                grouped[item.name].qty++;
+                subtotal += item.price;
+            });
+
+            Object.entries(grouped).forEach(([name, data]) => {
+                html += `<div class="cart-item">
+                    <div class="cart-item-info">
+                        <span>${name}</span>
+                        <span class="cart-qty">${data.qty}x</span>
+                    </div>
+                    <span>Rp ${(data.price * data.qty).toLocaleString('id-ID')}</span>
+                </div>`;
+            });
+
+            const tax = Math.round(subtotal * 0.1);
+            const total = subtotal + tax;
+
+            cartSummary.innerHTML = html;
+            document.getElementById('subtotal').textContent = 'Rp ' + subtotal.toLocaleString('id-ID');
+            document.getElementById('tax').textContent = 'Rp ' + tax.toLocaleString('id-ID');
+            document.getElementById('total').textContent = 'Rp ' + total.toLocaleString('id-ID');
+        }
+
+        updateCartSummary();
+    </script>
+</body>
+</html>

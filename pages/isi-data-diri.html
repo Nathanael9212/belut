@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Isi Data Diri - Sisambera</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header>
+        <a href="../index.html" class="logo">SISAMBERA</a>
+        <nav>
+            <a href="../index.html">Menu</a>
+            <a href="https://share.google/Z9udVdDifWWRAh0lY">Lokasi</a>
+            <a href="">Tentang Kami</a>
+        </nav>
+        <button class="order-btn">Pesan Online</button>
+    </header>
+
+    <div class="breadcrumb">
+        <a href="pilih-layanan.html" style="color: #999;">1. Pilih Layanan</a> > 
+        <span style="color: #c1395d; font-weight: 500;">2. Isi Data Diri</span> > 
+        <span style="color: #ccc;">3. Pilih Menu</span> > 
+        <span style="color: #ccc;">4. Pembayaran</span>
+    </div>
+
+    <div class="container">
+        <div class="content-wrapper" style="grid-template-columns: 1fr; max-width: 600px; margin: 0 auto;">
+            <div class="data-diri-content">
+                <h2>Isi Data Diri Anda</h2>
+                <p style="color: #999; font-size: 13px; margin-bottom: 25px;">Masukkan data diri Anda untuk melanjutkan pemesanan</p>
+                
+                <form id="dataForm" onsubmit="submitData(event)">
+                    <div class="form-group">
+                        <label for="nama">Nama Lengkap <span style="color: #c1395d;">*</span></label>
+                        <input type="text" id="nama" name="nama" placeholder="Masukkan nama lengkap Anda" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nomorHp">Nomor HP <span style="color: #c1395d;">*</span></label>
+                        <input type="tel" id="nomorHp" name="nomorHp" placeholder="08xxxxxxxxxx" pattern="[0-9]{10,13}" required>
+                        <small style="color: #999; font-size: 12px; margin-top: 5px; display: block;">Contoh: 081234567890</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="catatan">Catatan (Opsional)</label>
+                        <textarea id="catatan" name="catatan" rows="3" placeholder="Tambahkan catatan untuk pesanan Anda (contoh: alergi, request khusus, dll)"></textarea>
+                    </div>
+
+                    <div class="order-info-card">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span style="font-weight: 600; color: #666;">Layanan Dipilih:</span>
+                            <span id="selectedServiceDisplay" style="font-weight: 600; color: #c1395d;">-</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Lanjutkan ke Pilih Menu</button>
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='pilih-layanan.html'" style="width: 100%; margin-top: 10px;">← Kembali</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Rumah Makan Tradisional</h4>
+                <p>Hmmm rasakan Uisa rumahan dengan cita rasa tak terlupakan</p>
+            </div>
+            <div class="footer-section">
+                <h4>CONTACT ME</h4>
+                <p>+62 895 002 84858</p>
+                <p>Jl. Pradah Indah No.121</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <p><a href="../index.html">Menu</a></p>
+                <p><a href="pilih-layanan.html">Order</a></p>
+                <p><a href="#">Contact Us</a></p>
+            </div>
+            <div class="footer-section">
+                <h4>Our Social Media</h4>
+                <div class="social-links">
+                    <a href="#">f</a>
+                    <a href="#">📷</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Load selected service
+        const selectedService = sessionStorage.getItem('selectedService');
+        if (!selectedService) {
+            window.location.href = 'pilih-layanan.html';
+        } else {
+            const serviceDisplay = selectedService === 'dine-in' ? 'Makan di Tempat' : 'Take Away';
+            document.getElementById('selectedServiceDisplay').textContent = serviceDisplay;
+        }
+
+        // Load existing data if any
+        const customerData = JSON.parse(sessionStorage.getItem('customerData') || '{}');
+        if (customerData.nama) {
+            document.getElementById('nama').value = customerData.nama;
+        }
+        if (customerData.nomorHp) {
+            document.getElementById('nomorHp').value = customerData.nomorHp;
+        }
+        if (customerData.catatan) {
+            document.getElementById('catatan').value = customerData.catatan;
+        }
+
+        function submitData(event) {
+            event.preventDefault();
+            
+            const nama = document.getElementById('nama').value.trim();
+            const nomorHp = document.getElementById('nomorHp').value.trim();
+            const catatan = document.getElementById('catatan').value.trim();
+
+            // Validate phone number
+            if (!/^[0-9]{10,13}$/.test(nomorHp)) {
+                alert('Nomor HP harus terdiri dari 10-13 digit angka');
+                return;
+            }
+
+            // Save to sessionStorage
+            const customerData = {
+                nama: nama,
+                nomorHp: nomorHp,
+                catatan: catatan,
+                timestamp: new Date().toISOString()
+            };
+
+            sessionStorage.setItem('customerData', JSON.stringify(customerData));
+            
+            // Show success notification
+            showNotification('Data berhasil disimpan! Mengarahkan ke menu...');
+            
+            // Redirect to menu page
+            setTimeout(() => {
+                window.location.href = 'pilih-menu.html';
+            }, 1000);
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = 'position:fixed;top:80px;right:20px;background:#4caf50;color:white;padding:12px 20px;border-radius:6px;z-index:9999;font-size:12px;box-shadow:0 4px 12px rgba(76, 175, 80, 0.3)';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 2000);
+        }
+    </script>
+</body>
+</html>
+

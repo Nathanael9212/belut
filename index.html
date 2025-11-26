@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sisambera - Sambal Belut Bu Raden</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <a href="index.html" class="logo">SISAMBERA</a>
+        <nav>
+            <a href="pages/pilih-menu.html">Menu</a>
+            <a href="https://share.google/Z9udVdDifWWRAh0lY">Lokasi</a>
+            <a href="">Tentang Kami</a>
+        </nav>
+        <button class="order-btn" onclick="window.location.href='pages/pilih-layanan.html'">Pesan Online</button>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Spesial Sambal Belut Bu Raden</h1>
+        <p>Pesan Makanan Anda Sambal Belut Secara Online</p>
+        <div class="hero-buttons">
+            <button class="btn-hero primary" onclick="scrollToMenu()">Lihat Menu</button>
+            <button class="btn-hero secondary" onclick="window.location.href='pages/pilih-layanan.html'">Pesan Sekarang</button>
+        </div>
+    </section>
+
+    <!-- Pilih Layanan -->
+    <section class="service-section">
+        <div style="max-width: 1400px; margin: 0 auto; padding: 0 30px;">
+            <h2 class="section-title">Pilih Layanan Anda</h2>
+            <div class="service-grid">
+                <div class="service-card" onclick="window.location.href='pages/pilih-layanan.html'">
+                    <div class="service-icon">🍽️</div>
+                    <h3>Makan di Tempat</h3>
+                    <p>Nikmati Suasana Premium Kami</p>
+                </div>
+                <div class="service-card" onclick="window.location.href='pages/pilih-layanan.html'">
+                    <div class="service-icon">🛍️</div>
+                    <h3>Take Away</h3>
+                    <p>Bawa pulang kesuksesan bu raden</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section class="menu-section" id="menu">
+        <div style="max-width: 1400px; margin: 0 auto; padding: 0 30px;">
+            <h2 class="section-title">Pilih Menu Anda</h2>
+            <div class="menu-tabs">
+                <button class="menu-tab active" data-category="makanan">Makanan</button>
+                <button class="menu-tab" data-category="minuman">Minuman</button>
+                <button class="menu-tab" data-category="lainnya">Pesanan Lainnya</button>
+            </div>
+            <div class="menu-grid" id="menuGrid"></div>
+        </div>
+    </section>
+
+    <!-- Favorites Section -->
+    <section class="favorites-section">
+        <div style="max-width: 1400px; margin: 0 auto; padding: 0 30px;">
+            <h2 class="section-title">Cicipil Menu Favorit Kami</h2>
+            <div class="menu-grid">
+                <div class="menu-card">
+                    <a href="images/pecel-belut.jpg" class="menu-image">
+                        <img src="images/pecel-belut.jpg" alt="Belut Goreng">
+                    </a>
+                    <div class="menu-info">
+                        <div class="menu-name">Belut Goreng</div>
+                        <div class="menu-desc">1 por, 1x1, 2m</div>
+                        <div class="menu-footer">
+                            <span class="menu-price">Rp 21.000</span>
+                            <button class="menu-add" onclick="addToCart('Belut Goreng', 21000)">Pesan</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <a href="images/pecel-belut.jpg" class="menu-image">
+                        <img src="images/pecel-belut.jpg" alt="Belut Goreng">
+                    </a>
+                    <div class="menu-info">
+                        <div class="menu-name">Belut Goreng</div>
+                        <div class="menu-desc">1 por, 1x1, 2m</div>
+                        <div class="menu-footer">
+                            <span class="menu-price">Rp 21.000</span>
+                            <button class="menu-add" onclick="addToCart('Belut Goreng', 21000)">Pesan</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <a href="images/pecel-belut.jpg" class="menu-image">
+                        <img src="images/pecel-belut.jpg" alt="Belut Goreng">
+                    </a>
+                    <div class="menu-info">
+                        <div class="menu-name">Belut Goreng</div>
+                        <div class="menu-desc">1 por, 1x1, 2m</div>
+                        <div class="menu-footer">
+                            <span class="menu-price">Rp 21.000</span>
+                            <button class="menu-add" onclick="addToCart('Belut Goreng', 21000)">Pesan</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <a href="images/pecel-belut.jpg" class="menu-image">
+                        <img src="images/pecel-belut.jpg" alt="Belut Goreng">
+                    </a>
+                    <div class="menu-info">
+                        <div class="menu-name">Belut Goreng</div>
+                        <div class="menu-desc">1 por, 1x1, 2m</div>
+                        <div class="menu-footer">
+                            <span class="menu-price">Rp 21.000</span>
+                            <button class="menu-add" onclick="addToCart('Belut Goreng', 21000)">Pesan</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Rumah Makan Tradisional</h4>
+                <p>Hmmm rasakan Uisa rumahan dengan cita rasa tak terlupakan dengan ke rasa tak terlupakan</p>
+            </div>
+            <div class="footer-section">
+                <h4>CONTACT ME</h4>
+                <p>+62 895 002 84858</p>
+                <p>Jl. Pradah Indah No.121</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <p><a href="pages/pilih-menu.html">Menu</a></p>
+                <p><a href="pages/pilih-layanan.html">Order</a></p>
+                <p><a href="#">Contact Us</a></p>
+            </div>
+            <div class="footer-section">
+                <h4>Our Social Media</h4>
+                <div class="social-links">
+                    <a href="#">f</a>
+                    <a href="#">📷</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const menuData = {
+            makanan: [
+                { name: 'Belut Goreng', desc: 'Daging urat peluru', price: 21000, image: 'images/pecel-belut.jpg' },
+                { name: 'Ayam Goreng', desc: 'Daging urat peluru', price: 16000, image: 'images/ayam-goreng.jpg' },
+                { name: 'Lele Goreng', desc: 'Daging urat peluru', price: 10500, image: 'images/lele.jpg' },
+                { name: 'Wader Goreng', desc: 'Daging urat peluru', price: 10000, image: 'images/lele.jpg' },
+                { name: 'Betok Goreng', desc: 'Daging urat peluru', price: 16000, image: 'images/bebek-goreng.jpg' },
+                { name: 'Tahu Tempe Telur', desc: 'Daging urat peluru', price: 8000, image: 'images/tahu-tempe-telor.jpg' },
+                { name: 'Nasi Putih', desc: 'Daging urat peluru', price: 4000, image: 'images/nasi.jpg' },
+                { name: 'Nasi Goreng', desc: 'Daging urat peluru', price: 5000, image: 'images/nasi.jpg' }
+            ],
+            minuman: [
+                { name: 'Teh Manis Hangat', desc: 'Teh premium segar', price: 3000, image: 'images/teh-hangat.jpeg' },
+                { name: 'Es Teh Manis', desc: 'Teh dingin segar', price: 4000, image: 'images/es-teh.jpg' },
+                { name: 'Jeruk Hangat', desc: 'Jeruk segar', price: 4000, image: 'images/jeruk-hangat.jpg' },
+                { name: 'Es Jeruk', desc: 'Jeruk dingin', price: 5000, image: 'images/es-jeruk.jpeg' },
+                { name: 'Air Mineral', desc: 'Air mineral murni', price: 4000, image: 'images/air-putih.jpg' }
+            ],
+            lainnya: [
+                { name: 'Sambal Ekstra', desc: 'Sambal pedas', price: 5000, image: 'images/bawang-goreng.jpg' },
+                { name: 'Lauk Pauk', desc: 'Pilihan lauk', price: 7000, image: 'images/tahu-tempe.jpg' }
+            ]
+        };
+
+        function renderMenu(category) {
+            const menuGrid = document.getElementById('menuGrid');
+            menuGrid.innerHTML = '';
+            
+            menuData[category].forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'menu-card';
+                card.innerHTML = `
+                    <a href="${item.image}" class="menu-image">
+                        <img src="${item.image}" alt="${item.name}">
+                    </a>
+                    <div class="menu-info">
+                        <div class="menu-name">${item.name}</div>
+                        <div class="menu-desc">${item.desc}</div>
+                        <div class="menu-footer">
+                            <span class="menu-price">Rp ${item.price.toLocaleString('id-ID')}</span>
+                            <button class="menu-add" onclick="addToCart('${item.name}', ${item.price})">+</button>
+                        </div>
+                    </div>
+                `;
+                menuGrid.appendChild(card);
+            });
+        }
+
+        function addToCart(name, price) {
+            let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+            cart.push({ name, price, id: Date.now() });
+            sessionStorage.setItem('cart', JSON.stringify(cart));
+            showNotification(`${name} ditambahkan!`);
+        }
+
+        function scrollToMenu() {
+            document.getElementById('menu').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = 'position:fixed;top:80px;right:20px;background:#c1395d;color:white;padding:12px 20px;border-radius:6px;z-index:9999;font-size:12px;box-shadow:0 4px 12px rgba(193, 57, 93, 0.3)';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 2000);
+        }
+
+        // Menu tab switching
+        document.querySelectorAll('.menu-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                renderMenu(this.dataset.category);
+            });
+        });
+
+        // Initial render
+        renderMenu('makanan');
+    </script>
+</body>
+</html>

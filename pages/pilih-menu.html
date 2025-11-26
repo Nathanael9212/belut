@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pilih Menu - Sisambera</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header>
+        <a href="../index.html" class="logo">SISAMBERA</a>
+        <nav>
+            <a href="../index.html">Menu</a>
+            <a href="https://share.google/Z9udVdDifWWRAh0lY">Lokasi</a>
+            <a href="">Tentang Kami</a>
+        </nav>
+        <button class="order-btn">Pesan Online</button>
+    </header>
+
+    <div class="breadcrumb">
+        <a href="pilih-layanan.html" style="color: #999;">1. Pilih Layanan</a> > 
+        <a href="isi-data-diri.html" style="color: #999;">2. Isi Data Diri</a> > 
+        <span style="color: #c1395d; font-weight: 500;">3. Pilih Menu</span> > 
+        <span style="color: #ccc;">4. Pembayaran</span>
+    </div>
+
+    <div class="container">
+        <div class="content-wrapper">
+            <div class="menu-content">
+                <h2>Pilih Menu Anda</h2>
+                
+                <div class="menu-tabs">
+                    <button class="menu-tab active" data-category="makanan">Makanan</button>
+                    <button class="menu-tab" data-category="minuman">Minuman</button>
+                    <button class="menu-tab" data-category="lainnya">Pesanan Lainnya</button>
+                </div>
+
+                <div class="menu-grid" id="menuGrid"></div>
+            </div>
+
+            <div class="order-summary-side">
+                <div class="summary-card">
+                    <h3>Ringkasan Pesanan</h3>
+                    <div id="cartSummary">
+                        <p style="text-align: center; color: #999; font-size: 13px;">Belum ada item</p>
+                    </div>
+                    <hr style="margin: 15px 0; border: none; border-top: 1px solid #e8e8e8;">
+                    <div class="summary-subtotal">
+                        <span>Subtotal</span>
+                        <span id="subtotal">Rp 0</span>
+                    </div>
+                    <div class="summary-fee">
+                        <span>Pajak 10%</span>
+                        <span id="tax">Rp 0</span>
+                    </div>
+                    <div class="summary-total">
+                        <strong>Total</strong>
+                        <strong id="total">Rp 0</strong>
+                    </div>
+                    <button class="btn btn-primary" style="margin-top: 15px;" onclick="goToCheckout()">Lanjutkan ke Pembayaran</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Rumah Makan Tradisional</h4>
+                <p>Hmmm rasakan Uisa rumahan dengan cita rasa tak terlupakan</p>
+            </div>
+            <div class="footer-section">
+                <h4>CONTACT ME</h4>
+                <p>+62 895 002 84858</p>
+                <p>Jl. Pradah Indah No.121</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <p><a href="../index.html">Menu</a></p>
+                <p><a href="pilih-layanan.html">Order</a></p>
+                <p><a href="#">Contact Us</a></p>
+            </div>
+            <div class="footer-section">
+                <h4>Our Social Media</h4>
+                <div class="social-links">
+                    <a href="#">f</a>
+                    <a href="#">📷</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const menuData = {
+            makanan: [
+                { name: 'Belut Goreng', desc: 'Daging urat peluru', price: 21000, image: '../images/pecel-belut.jpg' },
+                { name: 'Ayam Goreng', desc: 'Daging urat peluru', price: 16000, image: '../images/ayam-goreng.jpg' },
+                { name: 'Lele Goreng', desc: 'Daging urat peluru', price: 10500, image: '../images/lele.jpg' },
+                { name: 'Wader Goreng', desc: 'Daging urat peluru', price: 10000, image: '../images/lele.jpg' },
+                { name: 'Betok Goreng', desc: 'Daging urat peluru', price: 16000, image: '../images/bebek-goreng.jpg' },
+                { name: 'Tahu Tempe Telur', desc: 'Daging urat peluru', price: 8000, image: '../images/tahu-tempe-telor.jpg' },
+                { name: 'Nasi Putih', desc: 'Daging urat peluru', price: 4000, image: '../images/nasi.jpg' },
+                { name: 'Nasi Goreng', desc: 'Daging urat peluru', price: 5000, image: '../images/nasi.jpg' }
+            ],
+            minuman: [
+                { name: 'Teh Manis Hangat', desc: 'Teh premium segar', price: 3000, image: '../images/teh-hangat.jpeg' },
+                { name: 'Es Teh Manis', desc: 'Teh dingin segar', price: 4000, image: '../images/es-teh.jpg' },
+                { name: 'Jeruk Hangat', desc: 'Jeruk segar', price: 4000, image: '../images/jeruk-hangat.jpg' },
+                { name: 'Es Jeruk', desc: 'Jeruk dingin', price: 5000, image: '../images/es-jeruk.jpeg' },
+                { name: 'Air Mineral', desc: 'Air mineral murni', price: 4000, image: '../images/air-putih.jpg' }
+            ],
+            lainnya: [
+                { name: 'Sambal Ekstra', desc: 'Sambal pedas', price: 5000, image: '../images/bawang-goreng.jpg' },
+                { name: 'Lauk Pauk', desc: 'Pilihan lauk', price: 7000, image: '../images/tahu-tempe.jpg' }
+            ]
+        };
+
+        function renderMenu(category) {
+            const menuGrid = document.getElementById('menuGrid');
+            menuGrid.innerHTML = '';
+            
+            menuData[category].forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'menu-card';
+                card.innerHTML = `
+                    <a href="${item.image}" class="menu-image">
+                        <img src="${item.image}" alt="${item.name}">
+                    </a>
+                    <div class="menu-info">
+                        <div class="menu-name">${item.name}</div>
+                        <div class="menu-desc">${item.desc}</div>
+                        <div class="menu-footer">
+                            <span class="menu-price">Rp ${item.price.toLocaleString('id-ID')}</span>
+                            <button class="menu-add" onclick="addToCart('${item.name}', ${item.price})">+</button>
+                        </div>
+                    </div>
+                `;
+                menuGrid.appendChild(card);
+            });
+        }
+
+        function addToCart(name, price) {
+            let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+            cart.push({ name, price, id: Date.now() });
+            sessionStorage.setItem('cart', JSON.stringify(cart));
+            updateCartSummary();
+            showNotification(`${name} ditambahkan ke keranjang!`);
+        }
+
+        function deleteItem(itemId) {
+            if (confirm('Hapus item ini dari keranjang?')) {
+                let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+                cart = cart.filter(item => item.id !== itemId);
+                sessionStorage.setItem('cart', JSON.stringify(cart));
+                updateCartSummary();
+                showNotification('Item berhasil dihapus!');
+            }
+        }
+
+        function editItemQty(itemId) {
+            let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+            const item = cart.find(i => i.id === itemId);
+            if (!item) return;
+
+            const newQty = prompt(`Ubah jumlah ${item.name}:`, '1');
+            if (newQty === null) return;
+
+            const qty = parseInt(newQty);
+            if (isNaN(qty) || qty < 1) {
+                alert('Jumlah tidak valid!');
+                return;
+            }
+
+            // Remove all instances of this item
+            cart = cart.filter(i => i.id !== itemId);
+            
+            // Add new instances based on new quantity
+            for (let i = 0; i < qty; i++) {
+                cart.push({ 
+                    name: item.name, 
+                    price: item.price, 
+                    id: itemId 
+                });
+            }
+
+            sessionStorage.setItem('cart', JSON.stringify(cart));
+            updateCartSummary();
+            showNotification('Jumlah berhasil diubah!');
+        }
+
+        function updateCartSummary() {
+            let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+            const cartSummary = document.getElementById('cartSummary');
+
+            if (cart.length === 0) {
+                cartSummary.innerHTML = '<p style="text-align: center; color: #999; font-size: 13px;">Belum ada item</p>';
+                document.getElementById('subtotal').textContent = 'Rp 0';
+                document.getElementById('tax').textContent = 'Rp 0';
+                document.getElementById('total').textContent = 'Rp 0';
+                return;
+            }
+
+            let html = '';
+            let subtotal = 0;
+            const grouped = {};
+
+            cart.forEach(item => {
+                if (!grouped[item.name]) {
+                    grouped[item.name] = { 
+                        price: item.price, 
+                        qty: 0, 
+                        id: item.id 
+                    };
+                }
+                grouped[item.name].qty++;
+                subtotal += item.price;
+            });
+
+            Object.entries(grouped).forEach(([name, data]) => {
+                html += `<div class="cart-item">
+                    <div class="cart-item-info">
+                        <span>${name}</span>
+                        <span class="cart-qty">${data.qty}x</span>
+                    </div>
+                    <span class="cart-item-price">Rp ${(data.price * data.qty).toLocaleString('id-ID')}</span>
+                    <div class="cart-item-actions">
+                        <button class="btn-edit" onclick="editItemQty(${data.id})" title="Edit jumlah">✏️</button>
+                        <button class="btn-delete" onclick="deleteItem(${data.id})" title="Hapus">🗑️</button>
+                    </div>
+                </div>`;
+            });
+
+            const tax = Math.round(subtotal * 0.1);
+            const total = subtotal + tax;
+
+            cartSummary.innerHTML = html;
+            document.getElementById('subtotal').textContent = 'Rp ' + subtotal.toLocaleString('id-ID');
+            document.getElementById('tax').textContent = 'Rp ' + tax.toLocaleString('id-ID');
+            document.getElementById('total').textContent = 'Rp ' + total.toLocaleString('id-ID');
+        }
+
+        function goToCheckout() {
+            let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+            if (cart.length === 0) {
+                alert('Pilih menu terlebih dahulu!');
+                return;
+            }
+            window.location.href = 'pembayaran.html';
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = 'position:fixed;top:80px;right:20px;background:#c1395d;color:white;padding:12px 20px;border-radius:6px;z-index:9999;font-size:12px;box-shadow:0 4px 12px rgba(193, 57, 93, 0.3)';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 2000);
+        }
+
+        document.querySelectorAll('.menu-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                renderMenu(this.dataset.category);
+            });
+        });
+
+        // Check if customer data exists
+        const customerData = JSON.parse(sessionStorage.getItem('customerData') || '{}');
+        if (!customerData.nama || !customerData.nomorHp) {
+            alert('Silakan isi data diri terlebih dahulu!');
+            window.location.href = 'isi-data-diri.html';
+        }
+
+        renderMenu('makanan');
+        updateCartSummary();
+    </script>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status Pesanan - Sisambera</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header>
+        <a href="../index.html" class="logo">SISAMBERA</a>
+        <nav>
+            <a href="../index.html">Menu</a>
+            <a href="https://share.google/Z9udVdDifWWRAh0lY">Lokasi</a>
+            <a href="">Tentang Kami</a>
+        </nav>
+        <button class="order-btn">Pesan Online</button>
+    </header>
+
+    <div class="breadcrumb">
+        <a href="../index.html" style="color: #c1395d; cursor: pointer;">← Back to Menu</a>
+    </div>
+
+    <div class="status-container">
+        <div class="status-header">
+            <h1>Status Pesanan Dan Antrian Anda</h1>
+        </div>
+
+        <p class="status-subtitle">Tunjukkan bukti pembayaran ke kasir untuk memproses pesanan anda</p>
+
+        <div class="status-card-waiting">
+            <div class="status-label">Sedang Dipanggil</div>
+            <div class="status-number" id="callingNumber">105</div>
+        </div>
+
+        <div class="queue-info-card">
+            <div class="status-label">Nomor Antrian Anda Dipanggil</div>
+            <div class="queue-number" id="queueNumber">112</div>
+            <div class="queue-desc">Pindai di kasir pengambilan makanan</div>
+            <div class="queue-image">📸</div>
+        </div>
+
+        <div class="next-info">
+            <div class="next-label">Nomor Antrian Anda Dipanggil</div>
+            <div class="next-text">Silahkan ambil pesanan anda di kasir untuk pengambilan makanan</div>
+        </div>
+
+        <div class="status-progress">
+            <div class="progress-label">Status Pesanan</div>
+            <div class="progress-bar">
+                <div class="progress-line active"></div>
+                <div class="progress-step completed">📋</div>
+                <div class="progress-step active">⏱️</div>
+                <div class="progress-step">🔔</div>
+                <div class="progress-step">🏠</div>
+            </div>
+        </div>
+
+        <button class="detail-pesanan-btn" onclick="toggleOrderDetails()">Detail Pesanan ▼</button>
+        
+        <div id="orderDetailsPanel" style="display: none; margin-top: 20px; background: white; border-radius: 12px; padding: 20px; border: 1px solid #e8e8e8;">
+            <h3 style="font-size: 16px; margin-bottom: 15px;">Detail Pesanan</h3>
+            <div id="orderDetailContent"></div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Rumah Makan Tradisional</h4>
+                <p>Hmmm rasakan Uisa rumahan dengan cita rasa tak terlupakan</p>
+            </div>
+            <div class="footer-section">
+                <h4>CONTACT ME</h4>
+                <p>+62 895 002 84858</p>
+                <p>Jl. Pradah Indah No.121</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <p><a href="../index.html">Menu</a></p>
+                <p><a href="pilih-layanan.html">Order</a></p>
+                <p><a href="#">Contact Us</a></p>
+            </div>
+            <div class="footer-section">
+                <h4>Our Social Media</h4>
+                <div class="social-links">
+                    <a href="#">f</a>
+                    <a href="#">📷</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let detailsVisible = false;
+
+        function updateQueueStatus() {
+            const callingNumber = document.getElementById('callingNumber');
+            const currentQueue = parseInt(callingNumber.textContent);
+            
+            setInterval(() => {
+                const nextNumber = currentQueue + Math.floor(Math.random() * 2) + 1;
+                callingNumber.textContent = nextNumber;
+            }, 8000);
+        }
+
+        function toggleOrderDetails() {
+            detailsVisible = !detailsVisible;
+            const panel = document.getElementById('orderDetailsPanel');
+            const btn = document.querySelector('.detail-pesanan-btn');
+            
+            if (detailsVisible) {
+                panel.style.display = 'block';
+                btn.textContent = 'Detail Pesanan ▲';
+                loadOrderDetails();
+            } else {
+                panel.style.display = 'none';
+                btn.textContent = 'Detail Pesanan ▼';
+            }
+        }
+
+        function loadOrderDetails() {
+            let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+            const orderId = sessionStorage.getItem('orderId') || '#PSM-12345';
+            const paymentMethod = sessionStorage.getItem('paymentMethod') || 'tunai';
+            const detailContent = document.getElementById('orderDetailContent');
+            
+            if (cart.length === 0) {
+                // Demo data
+                cart = [
+                    { name: 'Belut Goreng', price: 21000 },
+                    { name: 'Belut Goreng', price: 21000 },
+                    { name: 'Nasi Putih', price: 4000 }
+                ];
+            }
+
+            let html = '<div style="font-size: 13px;">';
+            html += `<div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #f0f0f0;">`;
+            html += `<strong>Order ID:</strong> <span style="color: #e91e63;">${orderId}</span><br>`;
+            html += `<strong>Payment Method:</strong> ${paymentMethod.charAt(0).toUpperCase() + paymentMethod.slice(1)}`;
+            html += `</div>`;
+            
+            html += '<div style="margin-bottom: 10px;"><strong>Items:</strong></div>';
+            
+            let subtotal = 0;
+            const grouped = {};
+            
+            cart.forEach(item => {
+                if (!grouped[item.name]) {
+                    grouped[item.name] = { price: item.price, qty: 0 };
+                }
+                grouped[item.name].qty++;
+                subtotal += item.price;
+            });
+
+            Object.entries(grouped).forEach(([name, data]) => {
+                html += `<div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f5f5f5;">`;
+                html += `<span>${name} x${data.qty}</span>`;
+                html += `<span>Rp ${(data.price * data.qty).toLocaleString('id-ID')}</span>`;
+                html += `</div>`;
+            });
+
+            const tax = Math.round(subtotal * 0.1);
+            const total = subtotal + tax;
+
+            html += `<div style="margin-top: 15px; padding-top: 15px; border-top: 2px solid #e8e8e8;">`;
+            html += `<div style="display: flex; justify-content: space-between; margin-bottom: 8px;"><span>Subtotal:</span><span>Rp ${subtotal.toLocaleString('id-ID')}</span></div>`;
+            html += `<div style="display: flex; justify-content: space-between; margin-bottom: 8px;"><span>Pajak (10%):</span><span>Rp ${tax.toLocaleString('id-ID')}</span></div>`;
+            html += `<div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 15px;"><span>Total:</span><span style="color: #c1395d;">Rp ${total.toLocaleString('id-ID')}</span></div>`;
+            html += `</div>`;
+            html += '</div>';
+
+            detailContent.innerHTML = html;
+        }
+
+        // Load order ID from session
+        const orderId = sessionStorage.getItem('orderId');
+        if (orderId) {
+            // You can display orderId somewhere if needed
+        }
+
+        updateQueueStatus();
+
+        setTimeout(() => {
+            const userQueue = parseInt(document.getElementById('queueNumber').textContent);
+            const callingQueue = parseInt(document.getElementById('callingNumber').textContent);
+            
+            if (userQueue <= callingQueue + 10) {
+                // Show notification that order is almost ready
+                const nextInfo = document.querySelector('.next-info');
+                nextInfo.style.animation = 'pulse 2s infinite';
+            }
+        }, 5000);
+    </script>
+</body>
+</html>

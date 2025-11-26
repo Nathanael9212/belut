@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konfirmasi Pembayaran - Sisambera</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+    <header>
+        <a href="../index.html" class="logo">SISAMBERA</a>
+        <nav>
+            <a href="../index.html">Menu</a>
+            <a href="https://share.google/Z9udVdDifWWRAh0lY">Lokasi</a>
+            <a href="">Tentang Kami</a>
+        </nav>
+        <button class="order-btn">Pesan Online</button>
+    </header>
+
+    <div class="breadcrumb">
+        <a href="pilih-layanan.html" style="color: #999;">1. Pilih Layanan</a> > 
+        <a href="isi-data-diri.html" style="color: #999;">2. Isi Data Diri</a> > 
+        <a href="pilih-menu.html" style="color: #999;">3. Pilih Menu</a> > 
+        <a href="pembayaran.html" style="color: #999;">4. Pembayaran</a> > 
+        <span style="color: #c1395d; font-weight: 500;">Konfirmasi</span>
+    </div>
+
+    <div class="container">
+        <div class="content-wrapper">
+            <div class="confirmation-content">
+                <h2>Konfirmasi Pembayaran anda</h2>
+                <p class="confirmation-subtitle">Tunjukkan bukti pembayaran ke kasir untuk memproses pesanan anda</p>
+                
+                <div id="paymentMethodDisplay"></div>
+
+                <div class="upload-section" id="uploadSection" style="display: none;">
+                    <p>Silakan upload bukti pembayaran Anda untuk memverifikasi transaksi. File harus dalam format JPG, PNG atau PDF (Max 5MB)</p>
+                    <input type="file" id="fileInput" accept="image/*,.pdf" style="display: none;" onchange="handleFileSelect(event)">
+                    <button class="upload-btn" onclick="document.getElementById('fileInput').click()">Pilih File</button>
+                    <div id="fileName" style="margin-top: 10px; font-size: 12px; color: #666;"></div>
+                </div>
+
+                <button class="btn btn-primary" onclick="completeOrder()" style="width: 100%; margin-top: 30px;">Konfirmasi ke Kasir</button>
+            </div>
+
+            <div class="order-summary-side">
+                <div class="summary-card">
+                    <h3>Ringkasan Pesanan</h3>
+                    <div id="cartSummary">
+                        <p style="text-align: center; color: #999; font-size: 13px;">Loading...</p>
+                    </div>
+                    <hr style="margin: 15px 0; border: none; border-top: 1px solid #e8e8e8;">
+                    <div class="order-details">
+                        <div class="detail-row">
+                            <span>Order ID</span>
+                            <span id="orderId" class="order-id">#PSM-12345</span>
+                        </div>
+                        <div class="detail-row">
+                            <span>Total Items</span>
+                            <span id="totalItems">0</span>
+                        </div>
+                        <div class="detail-row">
+                            <span>Payment Method</span>
+                            <span id="paymentMethod" style="text-transform: capitalize;">-</span>
+                        </div>
+                    </div>
+                    <hr style="margin: 15px 0; border: none; border-top: 1px solid #e8e8e8;">
+                    <div class="summary-subtotal">
+                        <span>Subtotal</span>
+                        <span id="subtotal">Rp 0</span>
+                    </div>
+                    <div class="summary-fee">
+                        <span>Pajak 10%</span>
+                        <span id="tax">Rp 0</span>
+                    </div>
+                    <div class="summary-total">
+                        <strong>Total</strong>
+                        <strong id="total">Rp 0</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Rumah Makan Tradisional</h4>
+                <p>Hmmm rasakan Uisa rumahan dengan cita rasa tak terlupakan</p>
+            </div>
+            <div class="footer-section">
+                <h4>CONTACT ME</h4>
+                <p>+62 895 002 84858</p>
+                <p>Jl. Pradah Indah No.121</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <p><a href="../index.html">Menu</a></p>
+                <p><a href="pilih-layanan.html">Order</a></p>
+                <p><a href="#">Contact Us</a></p>
+            </div>
+            <div class="footer-section">
+                <h4>Our Social Media</h4>
+                <div class="social-links">
+                    <a href="#">f</a>
+                    <a href="#">📷</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function generateOrderId() {
+            const timestamp = Date.now();
+            const random = Math.floor(Math.random() * 1000);
+            return '#PSM-' + timestamp.toString().slice(-5) + random;
+        }
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const maxSize = 5 * 1024 * 1024; // 5MB
+                if (file.size > maxSize) {
+                    alert('File terlalu besar! Maksimal 5MB');
+                    return;
+                }
+                document.getElementById('fileName').textContent = '✓ File terpilih: ' + file.name;
+                document.getElementById('fileName').style.color = '#4caf50';
+            }
+        }
+
+        function displayPaymentMethod() {
+            const method = sessionStorage.getItem('paymentMethod') || 'tunai';
+            const selectedBank = sessionStorage.getItem('selectedBank') || 'BCA';
+            const methodDisplay = document.getElementById('paymentMethodDisplay');
+            const paymentMethodSpan = document.getElementById('paymentMethod');
+            const uploadSection = document.getElementById('uploadSection');
+
+            if (method === 'tunai') {
+                methodDisplay.innerHTML = `
+                    <div class="payment-display">
+                        <div class="payment-icon-large">💰</div>
+                        <h3>Pembayaran Tunai</h3>
+                        <p>Bayar langsung ke kasir saat mengambil pesanan</p>
+                    </div>
+                `;
+                paymentMethodSpan.textContent = 'Tunai';
+            } else if (method === 'qris') {
+                methodDisplay.innerHTML = `
+                    <div class="payment-display">
+                        <div class="payment-icon-large">📱</div>
+                        <h3>QRIS Payment</h3>
+                        <p>Scan QR code di bawah dengan aplikasi banking anda</p>
+                    </div>
+                    <div class="qr-section">
+                        <div id="qrCode" style="display: flex; justify-content: center;"></div>
+                        <p class="qr-text">Scan dengan aplikasi e-wallet atau banking Anda</p>
+                    </div>
+                `;
+                paymentMethodSpan.textContent = 'QRIS';
+                uploadSection.style.display = 'block';
+                setTimeout(() => {
+                    const orderId = document.getElementById('orderId').textContent;
+                    new QRCode(document.getElementById('qrCode'), {
+                        text: 'https://payment.sisambera.id/' + orderId,
+                        width: 180,
+                        height: 180,
+                        colorDark: "#000000",
+                        colorLight: "#ffffff",
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+                }, 100);
+            } else if (method === 'transfer') {
+                const bankName = selectedBank.toUpperCase();
+                methodDisplay.innerHTML = `
+                    <div class="payment-display">
+                        <div class="payment-icon-large">🏦</div>
+                        <h3>Bank Transfer - ${bankName}</h3>
+                        <p>Transfer ke rekening kami di bawah ini</p>
+                    </div>
+                    <div class="bank-info">
+                        <div class="bank-detail">
+                            <span class="bank-label">Bank Tujuan</span>
+                            <span class="bank-value">${bankName}</span>
+                        </div>
+                        <div class="bank-detail">
+                            <span class="bank-label">Nomor Rekening</span>
+                            <span class="bank-value">1234567890</span>
+                        </div>
+                        <div class="bank-detail">
+                            <span class="bank-label">Atas Nama</span>
+                            <span class="bank-value">Bu Raden</span>
+                        </div>
+                    </div>
+                `;
+                paymentMethodSpan.textContent = `Bank Transfer (${bankName})`;
+                uploadSection.style.display = 'block';
+            }
+        }
+
+        function updateCartSummary() {
+            let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+            const cartSummary = document.getElementById('cartSummary');
+            const orderId = generateOrderId();
+
+            if (cart.length === 0) {
+                window.location.href = 'pilih-menu.html';
+                return;
+            }
+
+            let html = '';
+            let subtotal = 0;
+            const grouped = {};
+
+            cart.forEach(item => {
+                if (!grouped[item.name]) {
+                    grouped[item.name] = { price: item.price, qty: 0 };
+                }
+                grouped[item.name].qty++;
+                subtotal += item.price;
+            });
+
+            Object.entries(grouped).forEach(([name, data]) => {
+                html += `<div class="cart-item">
+                    <div class="cart-item-info">
+                        <span>${name}</span>
+                        <span class="cart-qty">${data.qty}x</span>
+                    </div>
+                    <span>Rp ${(data.price * data.qty).toLocaleString('id-ID')}</span>
+                </div>`;
+            });
+
+            const tax = Math.round(subtotal * 0.1);
+            const total = subtotal + tax;
+
+            cartSummary.innerHTML = html;
+            document.getElementById('subtotal').textContent = 'Rp ' + subtotal.toLocaleString('id-ID');
+            document.getElementById('tax').textContent = 'Rp ' + tax.toLocaleString('id-ID');
+            document.getElementById('total').textContent = 'Rp ' + total.toLocaleString('id-ID');
+            document.getElementById('orderId').textContent = orderId;
+            document.getElementById('totalItems').textContent = cart.length;
+        }
+
+        function completeOrder() {
+            const orderId = document.getElementById('orderId').textContent;
+            const method = sessionStorage.getItem('paymentMethod');
+            
+            if ((method === 'qris' || method === 'transfer') && !document.getElementById('fileName').textContent) {
+                if (!confirm('Anda belum mengupload bukti pembayaran. Lanjutkan?')) {
+                    return;
+                }
+            }
+            
+            sessionStorage.setItem('orderId', orderId);
+            window.location.href = 'status-pesanan.html';
+        }
+
+        updateCartSummary();
+        displayPaymentMethod();
+    </script>
+</body>
+</html>

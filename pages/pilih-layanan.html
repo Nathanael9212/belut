@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pilih Layanan - Sisambera</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header>
+        <a href="../index.html" class="logo">SISAMBERA</a>
+        <nav>
+            <a href="../index.html">Menu</a>
+            <a href="https://share.google/Z9udVdDifWWRAh0lY">Lokasi</a>
+            <a href="">Tentang Kami</a>
+        </nav>
+        <button class="order-btn" onclick="window.location.href='pilih-layanan.html'">Pesan Online</button>
+    </header>
+
+    <div class="breadcrumb">
+        <span style="color: #c1395d; font-weight: 500;">1. Pilih Layanan</span> > 
+        <span style="color: #ccc;">2. Isi Data Diri</span> > 
+        <span style="color: #ccc;">3. Pilih Menu</span> > 
+        <span style="color: #ccc;">4. Pembayaran</span>
+    </div>
+
+    <div class="container">
+        <div class="content-wrapper" style="grid-template-columns: 1fr; max-width: 900px; margin: 0 auto;">
+            <div class="pilih-layanan-content">
+                <h2>Pilih Layanan Anda</h2>
+                
+                <div class="layanan-options">
+                    <div class="layanan-card" onclick="selectService(this, 'dine-in')">
+                        <div class="layanan-icon">🍽️</div>
+                        <h3>Makan di Tempat</h3>
+                        <p>Nikmati suasana premium kami</p>
+                    </div>
+                    
+                    <div class="layanan-card" onclick="selectService(this, 'takeaway')">
+                        <div class="layanan-icon">🛍️</div>
+                        <h3>Take Away</h3>
+                        <p>Bawa pulang kesuksesan bu raden</p>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="continueOrder()">Lanjutkan</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Rumah Makan Tradisional</h4>
+                <p>Hmmm rasakan Uisa rumahan dengan cita rasa tak terlupakan</p>
+            </div>
+            <div class="footer-section">
+                <h4>CONTACT ME</h4>
+                <p>+62 895 002 84858</p>
+                <p>Jl. Pradah Indah No.121</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <p><a href="../index.html">Menu</a></p>
+                <p><a href="pilih-layanan.html">Order</a></p>
+                <p><a href="#">Contact Us</a></p>
+            </div>
+            <div class="footer-section">
+                <h4>Our Social Media</h4>
+                <div class="social-links">
+                    <a href="#">f</a>
+                    <a href="#">📷</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let selectedService = null;
+
+        function selectService(element, service) {
+            document.querySelectorAll('.layanan-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            selectedService = service;
+        }
+
+        function continueOrder() {
+            if (!selectedService) {
+                alert('Pilih layanan terlebih dahulu!');
+                return;
+            }
+            sessionStorage.setItem('selectedService', selectedService);
+            window.location.href = 'isi-data-diri.html';
+        }
+    </script>
+</body>
+</html>
