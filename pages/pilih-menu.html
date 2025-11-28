@@ -157,37 +157,6 @@
             }
         }
 
-        function editItemQty(itemId) {
-            let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
-            const item = cart.find(i => i.id === itemId);
-            if (!item) return;
-
-            const newQty = prompt(`Ubah jumlah ${item.name}:`, '1');
-            if (newQty === null) return;
-
-            const qty = parseInt(newQty);
-            if (isNaN(qty) || qty < 1) {
-                alert('Jumlah tidak valid!');
-                return;
-            }
-
-            // Remove all instances of this item
-            cart = cart.filter(i => i.id !== itemId);
-            
-            // Add new instances based on new quantity
-            for (let i = 0; i < qty; i++) {
-                cart.push({ 
-                    name: item.name, 
-                    price: item.price, 
-                    id: itemId 
-                });
-            }
-
-            sessionStorage.setItem('cart', JSON.stringify(cart));
-            updateCartSummary();
-            showNotification('Jumlah berhasil diubah!');
-        }
-
         function updateCartSummary() {
             let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
             const cartSummary = document.getElementById('cartSummary');
@@ -224,7 +193,6 @@
                     </div>
                     <span class="cart-item-price">Rp ${(data.price * data.qty).toLocaleString('id-ID')}</span>
                     <div class="cart-item-actions">
-                        <button class="btn-edit" onclick="editItemQty(${data.id})" title="Edit jumlah">✏️</button>
                         <button class="btn-delete" onclick="deleteItem(${data.id})" title="Hapus">🗑️</button>
                     </div>
                 </div>`;

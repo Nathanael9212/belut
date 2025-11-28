@@ -89,6 +89,15 @@
     </footer>
 
     <script>
+        // Check for URL parameter first
+        const urlParams = new URLSearchParams(window.location.search);
+        const layananParam = urlParams.get('layanan');
+        
+        if (layananParam) {
+            // Save from URL parameter
+            sessionStorage.setItem('selectedService', layananParam);
+        }
+        
         // Load selected service
         const selectedService = sessionStorage.getItem('selectedService');
         if (!selectedService) {
